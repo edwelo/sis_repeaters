@@ -123,11 +123,13 @@
 		}
 		$sql = "SELECT stuid " . $tmp1 . $tmp2 . $tmp3 . " FROM people.stuenroll_static WHERE enrtype!='ns' GROUP BY stuid";
 
+		/*
 		if($schid) {
 			$search = "GROUP BY";
 			$replace = "AND schid=${schid} GROUP BY";
 			$sql = str_replace($search, $replace, $sql);
 		}
+		*/
 
 		if($_GET["a"]) printf($sqlPrintStr, str_replace("<", "&lt;", $sql));
 
@@ -139,6 +141,7 @@
 
 		while($tmp = $rs->fetch_assoc()) {
 			for($y=$minYear; $y<=$maxYear; $y++) {
+				if($schid) { if($schid != $tmp[$y . "s"]) continue; }
 				$py = $y - 1;
 				if($tmp[$y . "g"]) {
 					$data[$y]["N"]++;
@@ -148,7 +151,7 @@
 				}
 			}
 		}
-	
+
 		//calculate the percentages
 		foreach($data as $sy=>$row) {
 			$data[$sy]["rpt%"] = round($row["rpt"] / $row["N"], 3);
