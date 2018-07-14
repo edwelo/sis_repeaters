@@ -54,11 +54,11 @@ input[type="submit"]:hover {
 .div_header span {  float: left; color: white;  text-align: center; padding: 6px; 
 	font-size: 24px; line-height: 25px; }
 .div_header a {  float: left; color: white;  text-align: center; padding: 6px; 
-	text-decoration: none; font-size: 12px; line-height: 18px; border-radius: 4px; }
-.div_header a:hover { background-color:white;  color: #305A72; }
+	text-decoration: none; font-size: 12px; line-height: 18px; border-radius: 4px; 
+	cursor: pointer; }
+.div_header a:active { background-color:white;  color: #305A72; }
 .div_header-right {  float: right; }
 .div_.header img { margin: 0px; }
-
 
 .div_body {
     background: #FAFAFA;
@@ -95,4 +95,3 @@ input[type="submit"]:hover {
 }
 .tbl th { border: none; padding: 0 4px 0 4px; }
 .tbl td { border: 1px solid grey; padding: 0 4px 0 4px; }
-
