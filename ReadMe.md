@@ -21,4 +21,4 @@ Report 2
 
 Status:  
 Page works fine.  
-Report stats have been checked by manual counting for Koror grade 4 2017
+Report stats have been checked by manual counting of Koror grade 4 2017 data
