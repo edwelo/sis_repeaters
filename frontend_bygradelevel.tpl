@@ -45,7 +45,7 @@
 
 		<table id="listTable" class="tbl">
 			<caption style="display: none;">
-				sy,N,rpt,drop,new,rpt%,drop%,new%
+				glvl,N,rpt,drop,new,rpt%,drop%,new%
 			</caption>
 			<tr>
 				<th>Grade</th>
@@ -58,21 +58,22 @@
 				<th>New%</th>
 			</tr>
 			<tr style="vertical-align: top; cursor: pointer;">
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td style="text-align: center"></td>
+				<td style="text-align: center"></td>
+				<td style="text-align: center"></td>
+				<td style="text-align: center"></td>
+				<td style="text-align: center"></td>
+				<td style="text-align: center"></td>
+				<td style="text-align: center"></td>
+				<td style="text-align: center"></td>
 			</tr>
 		</table>
 	</div>
 
 	<!-- detail section -->
 	<div id="detail" class="div_body" style="display: none;">
-		School Year: <span id="detailSY"></span><br />
+		School Year: <span id="detailSY"></span>&nbsp;&nbsp;
+		Grade Level: <span id="detailGLvl"></span><br />
 		<div style="float: left; width: 33%;">
 			<h3>Repeat Students (<span id="rCount"></span>)</h3>
 			<div id="rptList">

@@ -41,6 +41,7 @@ if($_GET["pn"] == "Summary") {
 }
 
 if(isset($_GET["a"])) {
+	echo "<b>Returned Data</b>:<br />\n";
 	echo "<pre>"; print_r($data); echo "</pre>";
 } else {
 	$myJSON = json_encode($data);
