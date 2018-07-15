@@ -1,4 +1,4 @@
-#DRE SIS Enrollment Report Test#
+#DRE SIS Enrollment Report Test#  
 eo 180704
 
 Project Requested By:  
@@ -21,4 +21,5 @@ Project Requested By:
 
 **Status**  
 Page works fine.  
+Report stats have been checked by manual counting of Koror grade 4 2017 data
 Report stats have been checked by manual counting of Koror grade 4 2017 data
