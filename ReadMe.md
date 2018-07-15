@@ -19,6 +19,6 @@ Project Requested By:
 * Click on the table row to show, for that grade level, student names.  
 * Can be filtered by school
 
-Status:  
+**Status**  
 Page works fine.  
 Report stats have been checked by manual counting of Koror grade 4 2017 data
