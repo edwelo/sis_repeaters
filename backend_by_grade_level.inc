@@ -1,24 +1,25 @@
 <?php
 
 	if($sy) {
-	
+
 		$psy = $sy - 1; //previous sy
-	
+
 
 
 		if($glvl) {
 
 			$sql = "
-				SELECT 
-				stuid, 
-				enrdate,
-				SUM(IF(sy=${sy}, schid, 0)) AS schidThisYear,
-				SUM(IF(sy=${psy}, glvl, 0)) AS glvlLastYear,
-				SUM(IF(sy=${sy}, glvl, 0)) AS glvlThisYear,
-				SUM(IF(sy=${sy} AND enrtype='x', 1, 0)) AS droppedThisYear 
-				FROM people.stuenroll_static 
-				WHERE sy IN (${psy}, ${sy}) AND enrtype!='ns' 
-				GROUP BY stuid 
+				SELECT
+				a.stuid,
+				CONCAT(b.fname, ' ', b.lname) AS stuname,
+				a.enrdate,
+				SUM(IF(a.sy=${sy}, a.schid, 0)) AS schidThisYear,
+				SUM(IF(a.sy=${psy}, a.glvl, 0)) AS glvlLastYear,
+				SUM(IF(a.sy=${sy}, a.glvl, 0)) AS glvlThisYear,
+				SUM(IF(a.sy=${sy} AND a.enrtype='x', 1, 0)) AS droppedThisYear
+				FROM people.stuenroll_static a, people.students b
+				WHERE a.stuid=b.id AND a.sy IN (${psy}, ${sy}) AND a.enrtype!='ns'
+				GROUP BY a.stuid
 				HAVING glvlThisYear = ${glvl}
 				";
 
@@ -32,65 +33,65 @@
 			$data["glvl"]["new"] = array();
 
 			$rs = $db->query($sql) or die("by grade detail: " . $db->error);
-			
+
 			$data["glvl"][0]["N"] = $rs->num_rows;
-			
+
 			if($_GET["a"]) printf($sqlPrintStr, "Number of Records Found: " . $rs->num_rows);
-			
+
 			while($tmp = $rs->fetch_assoc()) {
 				$lGLvl = $tmp["glvlLastYear"];
 				$tGLvl = $tmp["glvlThisYear"];
 				if($lGLvl && $tGLvl <= $lGLvl) {
 					$data["glvl"]["rpt"][] = array(
-												"stuid"=>$tmp["stuid"], 
+												"stuid"=>$tmp["stuid"],
 												"stuname"=>$tmp["stuname"],
 												"glvl"=>$tGLvl,
 												"date"=>$tmp["enrdate"]
 												);
-				} 
+				}
 				if($tmp["droppedThisYear"]) {
 					$data["glvl"]["drop"][] = array(
-												"stuid"=>$tmp["stuid"], 
+												"stuid"=>$tmp["stuid"],
 												"stuname"=>$tmp["stuname"],
 												"glvl"=>$tmp["glvlThisYear"],
 												"date"=>$tmp["enrdate"]
 												);
-				} 
+				}
 				if(!$lGLvl && $tGLvl > 1) {
 					$data["glvl"]["new"][] = array(
-												"stuid"=>$tmp["stuid"], 
+												"stuid"=>$tmp["stuid"],
 												"stuname"=>$tmp["stuname"],
-												"glvl"=>$tmp["glvlLastYear"] . ":" . $tmp["glvlThisYear"],
+												"glvl"=>$tmp["glvlThisYear"],
 												"date"=>$tmp["enrdate"]
 												);
-				} 
+				}
 			}
 
 		} else {
-			
+
 			$sql = "
 				SELECT
-					glvlThisYear, COUNT(*) AS N, 
+					glvlThisYear, COUNT(*) AS N,
 					SUM(IF(glvlLastYear AND glvlThisYear > glvlLastYear, 1, 0)) AS promoted,
 					SUM(IF(glvlLastYear AND glvlThisYear <= glvlLastYear, 1, 0)) AS retained,
 					SUM(droppedThisYear) AS dropped,
 					SUM(IF(glvlThisYear > 1 AND glvlLastYear = 0, 1, 0)) AS newIn
 				FROM
 					(
-						SELECT 
-						stuid, 
+						SELECT
+						stuid,
 						SUM(IF(sy=${sy}, schid, 0)) AS schidThisYear,
 						SUM(IF(sy=${psy}, glvl, 0)) AS glvlLastYear,
 						SUM(IF(sy=${sy}, glvl, 0)) AS glvlThisYear,
-						SUM(IF(sy=${sy} AND enrtype='x', 1, 0)) AS droppedThisYear 
-						FROM people.stuenroll_static 
-						WHERE sy IN (${psy}, ${sy}) AND enrtype!='ns' 
-						GROUP BY stuid 
+						SUM(IF(sy=${sy} AND enrtype='x', 1, 0)) AS droppedThisYear
+						FROM people.stuenroll_static
+						WHERE sy IN (${psy}, ${sy}) AND enrtype!='ns'
+						GROUP BY stuid
 					) a
-				WHERE glvlThisYear > 0 
-				GROUP BY glvlThisYear		
+				WHERE glvlThisYear > 0
+				GROUP BY glvlThisYear
 			";
-			
+
 			if($schid) $sql = str_replace("WHERE glvl", "WHERE schidThisYear=${schid} AND glvl", $sql);
 
 			if($_GET["a"]) printf($sqlPrintStr, str_replace("<", "&lt;", $sql));
